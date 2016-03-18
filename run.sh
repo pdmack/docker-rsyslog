@@ -3,9 +3,24 @@
 set -e
 set -x
 
-ES_HOST=${ES_HOST:-bitscout-elasticsearch}
+ES_HOST=${ES_HOST:-viaq-elasticsearch}
 ES_PORT=${ES_PORT:-9200}
 SYSLOG_LISTEN_PORT=${SYSLOG_LISTEN_PORT:-10514}
+DEBUG_RSYSLOG=${DEBUG_RSYSLOG:-true}
+
+if [ "$DEBUG_RSYSLOG" = true ]; then
+    RSYSLOG_ARGS="-d -n"
+else
+    RSYSLOG_ARGS=""
+fi
+
+if [ -f "/data/rsyslog.conf" ]; then
+    cp /data/rsyslog.conf /etc/rsyslog.conf
+    rm /etc/rsyslog.d/*.conf
+    if [ -d "/data/rsyslog.d" ]; then
+        cp /data/rsyslog.d/*.conf /etc/rsyslog.d/*.conf
+    fi
+fi
 
 for file in /etc/rsyslog.conf /etc/rsyslog.d/*.conf ; do
     if [ ! -f "$file" ] ; then continue ; fi
@@ -13,4 +28,4 @@ for file in /etc/rsyslog.conf /etc/rsyslog.d/*.conf ; do
         -e "s/%SYSLOG_LISTEN_PORT%/$SYSLOG_LISTEN_PORT/g" \
         "$file"
 done
-/usr/sbin/rsyslogd -d -n
+/usr/sbin/rsyslogd ${RSYSLOG_ARGS}
