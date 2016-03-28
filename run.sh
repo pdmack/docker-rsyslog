@@ -18,7 +18,9 @@ if [ -f "/data/rsyslog.conf" ]; then
     cp /data/rsyslog.conf /etc/rsyslog.conf
     rm /etc/rsyslog.d/*.conf
     if [ -d "/data/rsyslog.d" ]; then
-        cp /data/rsyslog.d/*.conf /etc/rsyslog.d/*.conf
+        for config in /data/rsyslog.d/*.conf; do
+            cp "$config" /etc/rsyslog.d/
+        done
     fi
 fi
 
