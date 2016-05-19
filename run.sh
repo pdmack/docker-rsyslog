@@ -11,7 +11,7 @@ DEBUG_RSYSLOG=${DEBUG_RSYSLOG:-true}
 if [ "$DEBUG_RSYSLOG" = true ]; then
     RSYSLOG_ARGS="-d -n"
 else
-    RSYSLOG_ARGS=""
+    RSYSLOG_ARGS="-n"
 fi
 
 if [ -f "/data/rsyslog.conf" ]; then
