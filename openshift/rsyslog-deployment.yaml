@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: rsyslog
+    rsyslog-name: ingestor
+  name: rsyslog-ingest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rsyslog
+      rsyslog-name: ingestor
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: rsyslog
+        rsyslog-name: ingestor
+    spec:
+      containers:
+      -
+        image: t0ffel/rsyslog
+        imagePullPolicy: Always
+        name: rsyslog
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        volumeMounts:
+        - mountPath: /etc/rsyslog.d
+          name: rsyslog-d
+          readOnly: true
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: rsyslog-d-conf
+        name: rsyslog-d

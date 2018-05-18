@@ -7,12 +7,24 @@ ENV SYSLOG_LISTEN_PORT=10514 \
     ES_HOST=bitscout-elasticsearch \
     ES_PORT=9200
 
-RUN curl https://copr.fedorainfracloud.org/coprs/portante/rsyslog-8.17/repo/epel-7/portante-rsyslog-8.17-epel-7.repo > /etc/yum.repos.d/portante-rsyslog-v8.17-epel-7.repo && \
-    yum install -y rsyslog rsyslog-elasticsearch rsyslog-gssapi \
-    rsyslog-mmjsonparse && \
-    yum clean all
+ADD rsyslog.repo /etc/yum.repos.d/
+
+RUN yum update -y && \
+    yum install -y rsyslog \
+    rsyslog-elasticsearch \
+#	rsyslog-imptcp \
+#	rsyslog-imrelp \
+	rsyslog-mmjsonparse \
+#	rsyslog-omrelp \
+#	rsyslog-omstdout \
+    rsyslog-mmsnmptrapd \
+	rsyslog-kafka && \
+    yum clean all && \
+	rm /etc/rsyslog.d/listen.conf
 
 VOLUME /data
+
+ADD rsyslog.conf /etc/
 
 ADD run.sh /usr/sbin/
 WORKDIR /var/lib/rsyslog
