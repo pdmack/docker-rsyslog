@@ -13,6 +13,7 @@ else
 	export USE_KUBECONFIG="--config ${KUBECONFIG}"
 fi
 
+oc project ${NAMESPACE}
 oc create configmap rsyslog-d-conf -n ${NAMESPACE} ${USE_KUBECONFIG} --from-file ../rsyslog.d --dry-run -o yaml > /tmp/rsyslog-d-conf.yaml
 oc apply -f /tmp/rsyslog-d-conf.yaml ${USE_KUBECONFIG}
 
