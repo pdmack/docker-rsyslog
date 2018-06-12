@@ -20,3 +20,5 @@ oc apply -f /tmp/rsyslog-d-conf.yaml ${USE_KUBECONFIG}
 oc apply -f rsyslog-deployment.yaml -n ${NAMESPACE} ${USE_KUBECONFIG}
 
 oc apply -f rsyslog-service.yaml -n ${NAMESPACE} ${USE_KUBECONFIG}
+
+oc apply -f rsyslog-external-service.yaml -n ${NAMESPACE} ${USE_KUBECONFIG}

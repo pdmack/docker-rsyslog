@@ -24,6 +24,8 @@ RUN yum update -y && \
 
 VOLUME /data
 
+RUN mkdir /tmp/rsyslog
+
 ADD rsyslog.conf /etc/
 
 ADD run.sh /usr/sbin/
