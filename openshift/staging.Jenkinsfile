@@ -13,6 +13,7 @@ properties(
       [
         string(defaultValue: 'external_config', description: 'commit ref hash, branch, or tag to build', name: 'GIT_REF'),
         string(defaultValue: 'dh-stage-ingest', description: 'OpenShift Project to deploy  into', name: 'OPENSHIFT_PROJECT'),
+        string(defaultVaule: 'one-kafka.dh-stage-message-bus.svc.cluster.local:9092', description: 'Destination Kafka cluster', name: 'KAFKA_BROKER')
       ]
     ),
     pipelineTriggers([])
@@ -56,7 +57,7 @@ def run_deployment() {
 
 # Run deployment script
 cd $WORKSPACE/container-rsyslog/openshift
-NAMESPACE=${OPENSHIFT_PROJECT} ./deploy-normalizer.sh
+NAMESPACE=${OPENSHIFT_PROJECT} ./deploy-normalizer.sh ${KAFKA_BROKER}
 '''
   } catch (err) {
     echo 'Exception caught, being re-thrown...'
